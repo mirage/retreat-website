@@ -96,6 +96,7 @@ let packages = [
   package ~min:"6.1.1" ~sublibs:["mirage"] "dns-certify";
   package "tls-mirage";
   package ~min:"4.5.0" ~sublibs:["network"] "mirage-runtime";
+  package ~pin:"git+https://github.com/robur-coop/utcp.git" "utcp";
 ]
 
 let () =
