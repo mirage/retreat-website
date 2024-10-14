@@ -1,4 +1,4 @@
-(* mirage >= 4.7.0 & < 4.8.0 *)
+(* mirage >= 4.8.0 & < 4.9.0 *)
 open Mirage
 
 (* uTCP *)
@@ -26,9 +26,7 @@ let net ?group name netif =
   let i6 = create_ipv6 ?group netif ethernet in
   let i4i6 = create_ipv4v6 ?group i4 i6 in
   let tcpv4v6 = direct_tcpv4v6 name i4i6 in
-  let ipv4_only = Runtime_arg.ipv4_only ?group () in
-  let ipv6_only = Runtime_arg.ipv6_only ?group () in
-  direct_stackv4v6 ~tcp:tcpv4v6 ~ipv4_only ~ipv6_only netif ethernet arp i4 i6
+  direct_stackv4v6 ?group ~tcp:tcpv4v6 netif ethernet arp i4 i6
 
 let net = net "service" default_network
 
@@ -98,6 +96,7 @@ let packages = [
   package ~min:"6.1.1" ~sublibs:["mirage"] "dns-certify";
   package "tls-mirage";
   package ~min:"4.5.0" ~sublibs:["network"] "mirage-runtime";
+  package ~pin:"git+https://github.com/robur-coop/utcp.git" "utcp";
 ]
 
 let () =
@@ -106,7 +105,6 @@ let () =
     optional_monitoring default_time default_posix_clock management_stack;
 
     main
-      ~runtime_args:[ runtime_arg ~pos:__POS__ "Unikernel.K.setup" ]
       ~packages
       "Unikernel.Main"
     (random @-> time @-> pclock @-> stackv4v6 @-> stackv4v6 @-> job)

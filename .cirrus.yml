@@ -1,0 +1,12 @@
+freebsd_instance:
+  image_family: freebsd-14-1
+
+freebsd_task:
+  pkg_install_script: pkg install -y ocaml-opam gmake bash
+  ocaml_script: opam init -a --comp=4.14.1
+  mirage_script: eval `opam env` && opam install --confirm-level=unsafe-yes "mirage>=4.8.0"
+  configure_script: eval `opam env` && mirage configure -t hvt
+  depend_script: eval `opam env` && gmake depend
+  build_script: eval `opam env` && gmake build
+  secondary_artifacts:
+    path: dist/retreat.hvt
