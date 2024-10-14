@@ -53,7 +53,7 @@ let monitoring =
       code ~pos:__POS__
         "Lwt.return (match %s with\
          | None -> Logs.warn (fun m -> m \"no monitor specified, not outputting statistics\")\
-         | Some ip -> %s.create ip ~hostname:(Domain_name.to_string %s) %s)"
+         | Some ip -> %s.create ip ~hostname:%s %s)"
         monitor modname name stack
     | _ -> assert false
   in
@@ -70,7 +70,7 @@ let syslog =
       code ~pos:__POS__
         "Lwt.return (match %s with\
          | None -> Logs.warn (fun m -> m \"no syslog specified, dumping on stdout\")\
-         | Some ip -> Logs.set_reporter (%s.create %s ip ~hostname:(Domain_name.to_string %s) ()))"
+         | Some ip -> Logs.set_reporter (%s.create %s ip ~hostname:%s ()))"
         syslog modname stack name
     | _ -> assert false
   in

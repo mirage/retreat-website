@@ -23,15 +23,11 @@ module K = struct
     let doc = Arg.info ~doc:"certificate key (<type>:seed or b64)" ["key"] in
     Mirage_runtime.register_arg Arg.(value & opt (some string) None doc)
 
-  let hostname_c =
-    Arg.conv
-      ((fun s -> Result.bind (Domain_name.of_string s) Domain_name.host),
-       Domain_name.pp)
-
   let hostname =
     let doc = Arg.info ~doc:"Name of the unikernel" ["name"] in
-    Mirage_runtime.register_arg
-      Arg.(value & opt hostname_c Domain_name.(host_exn (of_string_exn "retreat.mirageos.org")) doc)
+    Arg.(value & opt string "retreat.mirageos.org" doc)
+
+  let host = Mirage_runtime.register_arg hostname
 
   let no_tls =
     let doc = Arg.info ~doc:"Disable TLS" [ "no-tls" ] in
@@ -90,7 +86,17 @@ module Main (R : Mirage_crypto_rng_mirage.S) (T : Mirage_time.S) (P : Mirage_clo
       S.TCP.close tcp_flow
 
   let start _random _time _pclock stack management =
-    let hostname = K.hostname () in
+    let hostname =
+      let ( let* ) = Result.bind in
+      match
+        let* dn = Domain_name.of_string (K.host ()) in
+        Domain_name.host dn
+      with
+      | Ok h -> h
+      | Error `Msg msg ->
+        Logs.err (fun m -> m "hostname %s is not a hostname: %s" (K.host ()) msg);
+        exit Mirage_runtime.argument_error
+    in
     let data =
       let content_size = Cstruct.length Page.rendered in
       [ header content_size ; Page.rendered ]
