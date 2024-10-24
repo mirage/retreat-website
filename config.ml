@@ -93,7 +93,7 @@ let packages = [
   package "logs" ;
   package "cmarkit" ;
   package ~min:"3.7.1" "tcpip" ;
-  package ~min:"6.1.1" ~sublibs:["mirage"] "dns-certify";
+  package ~min:"9.1.0" ~sublibs:["mirage"] "dns-certify";
   package "tls-mirage";
   package ~min:"4.5.0" ~sublibs:["network"] "mirage-runtime";
   package ~pin:"git+https://github.com/robur-coop/utcp.git" "utcp";
