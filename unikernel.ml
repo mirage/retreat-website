@@ -4,7 +4,9 @@ module K = struct
   open Cmdliner
 
   let key =
-    Arg.conv ~docv:"HOST:HASH:DATA" Dns.Dnskey.(name_key_of_string, pp_name_key)
+    Arg.conv ~docv:"HOST:HASH:DATA"
+      Dns.Dnskey.(name_key_of_string,
+                  (fun ppf v -> Fmt.string ppf (name_key_to_string v)))
 
   let dns_key =
     let doc = Arg.info ~doc:"nsupdate key (name:type:value,...)" ["dns-key"] in
@@ -121,7 +123,7 @@ module Main (R : Mirage_crypto_rng_mirage.S) (T : Mirage_time.S) (P : Mirage_clo
              exit Mirage_runtime.argument_error
          in
          Dns_certify.retrieve_certificate
-           stack ~dns_key:(Fmt.to_to_string Dns.Dnskey.pp_name_key dns_key)
+           stack ~dns_key_name:(fst dns_key) (snd dns_key)
            ~hostname ~key_type ?key_data ?key_seed
            dns_server (K.dns_port ()) >|= function
          | Error (`Msg msg) ->
