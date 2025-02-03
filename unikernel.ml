@@ -29,6 +29,13 @@ module K = struct
     let doc = Arg.info ~doc:"Name of the unikernel" ["name"] in
     Arg.(value & opt string "retreat.mirageos.org" doc)
 
+  let domain_name =
+    Arg.conv ~docv:"DOMAIN NAME" (Domain_name.of_string, Domain_name.pp)
+
+  let additional_hostnames =
+    let doc = Arg.info ~doc:"Additional names of the unikernel" ["additional"] in
+    Mirage_runtime.register_arg Arg.(value & opt_all domain_name [] doc)
+
   let host = Mirage_runtime.register_arg hostname
 
   let no_tls =
@@ -122,9 +129,10 @@ module Main (R : Mirage_crypto_rng_mirage.S) (T : Mirage_time.S) (P : Mirage_clo
              Logs.err (fun m -> m "expected for key type:data");
              exit Mirage_runtime.argument_error
          in
+         let additional_hostnames = K.additional_hostnames () in
          Dns_certify.retrieve_certificate
            stack ~dns_key_name:(fst dns_key) (snd dns_key)
-           ~hostname ~key_type ?key_data ?key_seed
+           ~hostname ~additional_hostnames ~key_type ?key_data ?key_seed
            dns_server (K.dns_port ()) >|= function
          | Error (`Msg msg) ->
            Logs.err (fun m -> m "error while requesting certificate: %s" msg);
