@@ -18,16 +18,16 @@ body {
 
 let content =
   Cmarkit_html.of_doc ~safe:false (Cmarkit.Doc.of_string
-{___|# 14th MirageOS hack retreat
+{___|# 15th MirageOS hack retreat
 
-We invite you to participate in the fourteenth [MirageOS](https://mirage.io) hack retreat!
+We invite you to participate in the fifteenth [MirageOS](https://mirageos.org) hack retreat!
 The goal is to sync various MirageOS subprojects, start new ones, and fix bugs.
 
-* *When?* April 22nd (arrival) - 28th (departure) 2024
+* *When?* May 13th (arrival) - 20th (departure) 2025
 * *Where?* Marrakesh, Morocco
 * *Travelling information* Please check travel restrictions from your country to Morocco before registering.
-* *How much?* 550 EUR<sup>&#9733;</sup> (10% discount for early birds if you register before Feb 15th and pay before Feb 28th), accommodation and food (full board) included. No refunds possible.
-* *How do I register?* Register by sending a mail to <retreat2024@nqsb.io> **by March 15th, 2024** including:
+* *How much?* 550 EUR<sup>&#9733;</sup> (10% discount for early birds if you register and pay before March 1st), accommodation and food (full board) included. No refunds possible.
+* *How do I register?* Register by sending a mail to <retreat@mehnert.org> **before April 1st, 2025** including:
    * How you became interested in MirageOS;
    * Previous experience with MirageOS and OCaml (no upfront experience required);
    * Project(s) you're interested to work on; and
@@ -50,6 +50,7 @@ More information
 * We are also happy to pick you up at Jemaa el-Fnaa (phone number will be provided once you registered).
 
 Previous retreats:
+* 14th April 22nd - 28th 2024 in Marrakesh, reports: [Hannes](https://hannes.robur.coop/Posts/Retreat2024)
 * 13th November 20th - 26th 2023 in Marrakesh (cancelled due to lack of registrations)
 * 12th May 1st - 7th 2023 in Marrakesh, reports: [Reynir](https://reyn.ir/posts/2023-05-17-banawa-chat.html) [Romain](https://blog.osau.re/articles/mirageos_retreat.html) [Antonin, Isabella, Fabrice, Christiano, Jules, Paul-Elliot, Sonja](https://tarides.com/blog/2023-07-27-reflections-on-the-mirageos-retreat-in-morocco/)
 * 11th October 3rd - 9th 2022 in Mirleft, reports: [Raphaël Proust](https://raphael-proust.gitlab.io/code/mirage-retreat-2022-10.html) [Jules, Sayo, Enguerrand, Sonja, Jan, Lucas](https://tarides.com/blog/2022-10-28-the-mirageos-retreat-a-journey-of-food-cats-and-unikernels) [Pierre](http://blog.enssat.fr/2022/10/pierre-alain-enssat-teacher-at-11th.html) [mirage.io](https://mirage.io/blog/2022-11-07.retreat)
