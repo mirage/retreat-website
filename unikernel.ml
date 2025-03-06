@@ -51,8 +51,8 @@ module K = struct
     Mirage_runtime.register_arg Arg.(value & opt int 443 doc)
 end
 
-module Main (R : Mirage_crypto_rng_mirage.S) (T : Mirage_time.S) (P : Mirage_clock.PCLOCK) (S : Tcpip.Stack.V4V6) (Management : Tcpip.Stack.V4V6) = struct
-  module Dns_certify = Dns_certify_mirage.Make(R)(P)(T)(S)
+module Main (S : Tcpip.Stack.V4V6) (Management : Tcpip.Stack.V4V6) = struct
+  module Dns_certify = Dns_certify_mirage.Make(S)
   module TLS = Tls_mirage.Make(S.TCP)
 
   let http_header ~status xs =
@@ -94,7 +94,7 @@ module Main (R : Mirage_crypto_rng_mirage.S) (T : Mirage_time.S) (P : Mirage_clo
       Logs.warn (fun m -> m "TLS error %a" TLS.pp_write_error e);
       S.TCP.close tcp_flow
 
-  let start _random _time _pclock stack management =
+  let start stack management =
     let hostname =
       let ( let* ) = Result.bind in
       match
@@ -131,9 +131,8 @@ module Main (R : Mirage_crypto_rng_mirage.S) (T : Mirage_time.S) (P : Mirage_clo
          in
          let additional_hostnames = K.additional_hostnames () in
          Dns_certify.retrieve_certificate
-           stack ~dns_key_name:(fst dns_key) (snd dns_key)
-           ~hostname ~additional_hostnames ~key_type ?key_data ?key_seed
-           dns_server (K.dns_port ()) >|= function
+           stack dns_key ~hostname ~additional_hostnames ~key_type ?key_data
+           ?key_seed dns_server (K.dns_port ()) >|= function
          | Error (`Msg msg) ->
            Logs.err (fun m -> m "error while requesting certificate: %s" msg);
            exit Mirage_runtime.argument_error
