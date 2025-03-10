@@ -55,7 +55,7 @@ let monitoring =
     | _ -> assert false
   in
   impl
-    ~packages:[ package "mirage-monitoring" ]
+    ~packages:[ package ~min:"0.0.6" "mirage-monitoring" ]
     ~runtime_args:[ name; monitor ]
     ~connect "Mirage_monitoring.Make"
     (stackv4v6 @-> job)
@@ -72,7 +72,7 @@ let syslog =
     | _ -> assert false
   in
   impl
-    ~packages:[ package ~sublibs:[ "mirage" ] ~min:"0.4.0" "logs-syslog" ]
+    ~packages:[ package ~sublibs:[ "mirage" ] ~min:"0.5.0" "logs-syslog" ]
     ~runtime_args:[ name; syslog ]
     ~connect "Logs_syslog_mirage.Udp"
     (stackv4v6 @-> job)
